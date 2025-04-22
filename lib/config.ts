@@ -4,6 +4,7 @@ import Gemini from "@/components/icons/gemini"
 import Grok from "@/components/icons/grok"
 import Mistral from "@/components/icons/mistral"
 import OpenAI from "@/components/icons/openai"
+import { google } from "@ai-sdk/google"
 import { mistral } from "@ai-sdk/mistral"
 import { openai } from "@ai-sdk/openai"
 import {
@@ -55,19 +56,6 @@ export const MODELS_NOT_AVAILABLE = [
     ],
   },
   {
-    id: "gemini-1.5-pro",
-    name: "Gemini 1.5 Pro",
-    provider: "gemini",
-    available: false,
-    api_sdk: false,
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-    ],
-  },
-  {
     id: "claude-3-5-sonnet",
     name: "Claude 3.5 Sonnet",
     provider: "claude",
@@ -97,32 +85,6 @@ export const MODELS_NOT_AVAILABLE = [
     id: "grok-2",
     name: "Grok 2",
     provider: "grok",
-    available: false,
-    api_sdk: false,
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-    ],
-  },
-  {
-    id: "gemini-2.0-flash",
-    name: "Gemini 2.0 Flash",
-    provider: "gemini",
-    available: false,
-    api_sdk: false,
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-    ],
-  },
-  {
-    id: "gemini-2.5-pro",
-    name: "Gemini 2.5 Pro",
-    provider: "gemini",
     available: false,
     api_sdk: false,
     features: [
@@ -208,6 +170,81 @@ export const MODELS = [
     description:
       "Fine-tuned for chat. A lighter, faster option for everyday use.",
   },
+  {
+    id: "gemini-2.5-pro-preview",
+    name: "Gemini 2.5 Pro Preview",
+    provider: "gemini",
+    available: true,
+    api_sdk: google("models/gemini-2.5-pro-preview-03-25"),
+    features: [
+      {
+        id: "file-upload",
+        enabled: true,
+      },
+    ],
+    icon: Gemini,
+    description: "Google's stable production model, optimized for reliability.",
+  },
+  {
+    id: "gemini-2.5-pro-exp",
+    name: "Gemini 2.5 Pro Experimental",
+    provider: "gemini",
+    available: true,
+    api_sdk: google("models/gemini-2.5-pro-exp-03-25"),
+    features: [
+      {
+        id: "file-upload",
+        enabled: true,
+      },
+    ],
+    icon: Gemini,
+    description: "Google's experimental model.",
+  },
+  {
+    id: "gemini-2.5-flash",
+    name: "Gemini 2.5 Flash",
+    provider: "gemini",
+    available: true,
+    api_sdk: google("models/gemini-2.5-flash-preview-04-17"),
+    features: [
+      {
+        id: "file-upload",
+        enabled: true,
+      },
+    ],
+    icon: Gemini,
+    description: "Google's latest flash model.",
+  },
+  {
+    id: "gemini-2.0-flash",
+    name: "Gemini 2.0 Flash",
+    provider: "gemini",
+    available: true,
+    api_sdk: google("models/gemini-2.0-flash"),
+    features: [
+      {
+        id: "file-upload",
+        enabled: true,
+      },
+    ],
+    icon: Gemini,
+    description: "A fast and efficient Gemini model.",
+  },
+  {
+    id: "gemini-2.0-flash-lite",
+    name: "Gemini 2.0 Flash Lite",
+    provider: "gemini",
+    available: true,
+    api_sdk: google("models/gemini-2.0-flash-lite"),
+    features: [
+      {
+        id: "file-upload",
+        enabled: true,
+      },
+    ],
+    icon: Gemini,
+    description: "A lightweight version of the Gemini Flash model.",
+  },
 ] as Model[]
 
 export const MODELS_OPTIONS = [
@@ -233,12 +270,6 @@ const PROVIDERS_NOT_AVAILABLE = [
     icon: DeepSeek,
   },
   {
-    id: "gemini",
-    name: "Gemini",
-    icon: Gemini,
-    available: false,
-  },
-  {
     id: "claude",
     name: "Claude",
     available: false,
@@ -262,6 +293,11 @@ export const PROVIDERS = [
     id: "mistral",
     name: "Mistral",
     icon: Mistral,
+  },
+  {
+    id: "gemini",
+    name: "Gemini",
+    icon: Gemini,
   },
 ] as Provider[]
 
