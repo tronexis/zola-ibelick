@@ -2,6 +2,7 @@ import Claude from "@/components/icons/claude"
 import DeepSeek from "@/components/icons/deepseek"
 import Gemini from "@/components/icons/gemini"
 import Grok from "@/components/icons/grok"
+import Meta from "@/components/icons/meta"
 import Mistral from "@/components/icons/mistral"
 import OpenAI from "@/components/icons/openai"
 import OpenRouter from "@/components/icons/openrouter"
@@ -62,6 +63,54 @@ export const MODELS_FREE = [
     description:
       "A reasoning-first model trained with reinforcement learning, built for math, code, and complex problem solving",
     icon: DeepSeek,
+  },
+  {
+    id: "llama-4-maverick",
+    name: "Llama 4 Maverick",
+    provider: "openrouter",
+    features: [
+      {
+        id: "file-upload",
+        enabled: false,
+      },
+      {
+        id: "reasoning",
+        enabled: false,
+      },
+      {
+        id: "tool-use",
+        enabled: true,
+      },
+    ],
+    creator: "meta-llama",
+    api_sdk: "meta-llama/llama-4-maverick:free", // this is a special case for openrouter
+    description:
+      "A fast, high-quality model that can be used for a variety of tasks, including writing, coding, and more.",
+    icon: Meta,
+  },
+  {
+    id: "llama-4-scout",
+    name: "Llama 4 Scout",
+    provider: "openrouter",
+    features: [
+      {
+        id: "file-upload",
+        enabled: false,
+      },
+      {
+        id: "reasoning",
+        enabled: false,
+      },
+      {
+        id: "tool-use",
+        enabled: true,
+      },
+    ],
+    creator: "meta-llama",
+    api_sdk: "meta-llama/llama-4-scout:free", // this is a special case for openrouter
+    description:
+      "A fast, high-quality model that can be used for a variety of tasks, including writing, coding, and more.",
+    icon: Meta,
   },
   {
     id: "pixtral-large-latest",

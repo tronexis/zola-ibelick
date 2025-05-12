@@ -7,17 +7,15 @@ import { toast } from "@/components/ui/toast"
 import { useChats } from "@/lib/chat-store/chats/provider"
 import { useMessages } from "@/lib/chat-store/messages/provider"
 import { clearAllIndexedDBStores } from "@/lib/chat-store/persist"
-import {
-  AUTH_DAILY_MESSAGE_LIMIT,
-  DAILY_LIMIT_PRO_MODELS,
-  MODEL_DEFAULT,
-} from "@/lib/config"
+import { MODEL_DEFAULT } from "@/lib/config"
 import { cn } from "@/lib/utils"
 import { SignOut, User, X } from "@phosphor-icons/react"
 import { useTheme } from "next-themes"
 import { useRouter } from "next/navigation"
 import type React from "react"
 import { useEffect, useState } from "react"
+import { LayoutSection } from "./layout-section"
+import { SystemPromptSection } from "./system-prompt-section"
 
 type SettingsContentProps = {
   onClose: () => void
@@ -201,10 +199,12 @@ export function SettingsContent({
           </div>
         </div>
       </div>
+      {/* Layout */}
+      <LayoutSection />
       {/* Model Selection */}
       <div className="border-border border-t">
         <div className="px-6 py-4">
-          <h3 className="mb-3 text-sm font-medium">Preferred Model</h3>
+          <h3 className="mb-3 text-sm font-medium">Preferred model</h3>
           <div className="relative">
             <ModelSelector
               selectedModelId={selectedModelId}
@@ -213,10 +213,11 @@ export function SettingsContent({
             />
           </div>
           <p className="text-muted-foreground mt-2 text-xs">
-            This model will be used by default for new conversations
+            This model will be used by default for new conversations.
           </p>
         </div>
       </div>
+      <SystemPromptSection />
       {/* Sign Out */}
       <div className="border-border border-t">
         <div className="px-6 py-4">

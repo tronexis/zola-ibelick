@@ -11,9 +11,9 @@ import { useAgent } from "@/lib/agent-store/hooks"
 import { MODELS_OPTIONS } from "@/lib/config"
 import { ArrowUp, Stop, Warning } from "@phosphor-icons/react"
 import React, { useCallback, useEffect, useRef } from "react"
+import { PromptSystem } from "../suggestions/prompt-system"
 import { ButtonFileUpload } from "./button-file-upload"
 import { FileList } from "./file-list"
-import { PromptSystem } from "./prompt-system"
 import { SelectModel } from "./select-model"
 
 type ChatInputProps = {
@@ -30,7 +30,6 @@ type ChatInputProps = {
   onSelectModel: (model: string) => void
   selectedModel: string
   isUserAuthenticated: boolean
-  onSelectSystemPrompt: (systemPrompt: string) => void
   systemPrompt?: string
   stop: () => void
   status?: "submitted" | "streaming" | "ready" | "error"
@@ -50,7 +49,6 @@ export function ChatInput({
   onSelectModel,
   selectedModel,
   isUserAuthenticated,
-  onSelectSystemPrompt,
   stop,
   status,
   placeholder,
@@ -148,7 +146,6 @@ export function ChatInput({
     <div className="relative flex w-full flex-col gap-4">
       {hasSuggestions && (
         <PromptSystem
-          onSelectSystemPrompt={onSelectSystemPrompt}
           onValueChange={onValueChange}
           onSuggestion={onSuggestion}
           value={value}
