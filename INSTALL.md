@@ -2,7 +2,7 @@
 
 Zola is a free, open-source AI chat app with multi-model support. This guide covers how to install and run Zola on different platforms, including Docker deployment options.
 
-![Zola screenshot](./public/cover_zola.jpg)
+![Zola screenshot](./public/cover_zola.webp)
 
 ## Prerequisites
 
@@ -108,6 +108,14 @@ Here are the detailed steps to set up Google OAuth:
 10. Paste the Client ID and Client Secret in the Google provider settings
 11. Save the changes
 
+#### Guest user setup
+
+1. Go to your Supabase project dashboard
+2. Navigate to Authentication > Providers
+3. Toggle on "Allow anonymous sign-ins"
+
+This allows users limited access to try the product before properly creating an account.
+
 ### Database Schema
 
 Create the following tables in your Supabase SQL editor:
@@ -129,6 +137,7 @@ CREATE TABLE users (
   last_active_at TIMESTAMPTZ DEFAULT NOW(),
   daily_pro_message_count INTEGER,
   daily_pro_reset TIMESTAMPTZ,
+  system_prompt TEXT,
   CONSTRAINT users_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE -- Explicit FK definition
 );
 
@@ -171,19 +180,17 @@ CREATE TABLE chats (
 );
 
 -- Messages table
--- Note: Supabase types define id as number, typically SERIAL or BIGSERIAL in PG.
--- role is a string union, best represented as TEXT with potential CHECK constraint.
--- experimental_attachments and parts are JSONB.
 CREATE TABLE messages (
   id SERIAL PRIMARY KEY, -- Using SERIAL for auto-incrementing integer ID
   chat_id UUID NOT NULL,
+  user_id UUID,
   content TEXT,
   role TEXT NOT NULL CHECK (role IN ('system', 'user', 'assistant', 'data')), -- Added CHECK constraint
   experimental_attachments JSONB, -- Storing Attachment[] as JSONB
   parts JSONB,
-  tool_invocations JSONB,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  CONSTRAINT messages_chat_id_fkey FOREIGN KEY (chat_id) REFERENCES chats(id) ON DELETE CASCADE
+  CONSTRAINT messages_chat_id_fkey FOREIGN KEY (chat_id) REFERENCES chats(id) ON DELETE CASCADE,
+  CONSTRAINT messages_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Chat attachments table
@@ -196,8 +203,8 @@ CREATE TABLE chat_attachments (
   file_type TEXT,
   file_size INTEGER, -- Assuming INTEGER for file size
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  CONSTRAINT chat_attachments_chat_id_fkey FOREIGN KEY (chat_id) REFERENCES chats(id) ON DELETE CASCADE,
-  CONSTRAINT chat_attachments_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  CONSTRAINT fk_chat FOREIGN KEY (chat_id) REFERENCES chats(id) ON DELETE CASCADE,
+  CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Feedback table
@@ -208,7 +215,6 @@ CREATE TABLE feedback (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   CONSTRAINT feedback_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
-
 -- RLS (Row Level Security) Reminder
 -- Ensure RLS is enabled on these tables in your Supabase dashboard
 -- and appropriate policies are created.
@@ -218,18 +224,6 @@ CREATE TABLE feedback (
 -- CREATE POLICY "Users can update their own data." ON users FOR UPDATE USING (auth.uid() = id);
 -- ... add policies for other tables (agents, chats, messages, etc.) ...
 ```
-
-### Seeding Initial Data
-
-After creating the tables, you can seed the database with the default agents provided by Zola.
-
-To run the seed script:
-
-- Navigate to the SQL Editor in your Supabase project dashboard.
-- Open the `supabase/seed.sql` file from the Zola project codebase.
-- Copy the entire content of `seed.sql`.
-- Paste the content into the Supabase SQL Editor.
-- Click the "Run" button.
 
 ### Storage Setup
 

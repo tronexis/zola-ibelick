@@ -150,7 +150,6 @@ export type Database = {
           model: string | null
           title: string | null
           user_id: string
-          system_prompt: string | null
           public: boolean
         }
         Insert: {
@@ -160,7 +159,6 @@ export type Database = {
           model?: string | null
           title?: string | null
           user_id: string
-          system_prompt?: string | null
           public?: boolean
         }
         Update: {
@@ -170,7 +168,6 @@ export type Database = {
           model?: string | null
           title?: string | null
           user_id?: string
-          system_prompt?: string | null
           public?: boolean
         }
         Relationships: [
@@ -199,7 +196,7 @@ export type Database = {
           id: number
           role: "system" | "user" | "assistant" | "data"
           parts: Json | null
-          tool_invocations: Json | null
+          user_id?: string | null
         }
         Insert: {
           experimental_attachments?: Attachment[]
@@ -209,7 +206,7 @@ export type Database = {
           id?: number
           role: "system" | "user" | "assistant" | "data"
           parts?: Json
-          tool_invocations?: Json | null
+          user_id?: string | null
         }
         Update: {
           experimental_attachments?: Attachment[]
@@ -219,9 +216,17 @@ export type Database = {
           id?: number
           role?: "system" | "user" | "assistant" | "data"
           parts?: Json
-          tool_invocations?: Json | null
+          user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "messages_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       users: {
         Row: {
@@ -313,15 +318,7 @@ export type Database = {
     Functions: {
       [_ in never]: never
     }
-    Enums: {
-      orderstatus:
-        | "UNPAID"
-        | "PAID"
-        | "SHIPPED"
-        | "OUT"
-        | "CANCELLED"
-        | "PENDING"
-    }
+    Enums: {}
     CompositeTypes: {
       [_ in never]: never
     }
